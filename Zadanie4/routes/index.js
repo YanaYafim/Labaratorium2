@@ -1,23 +1,18 @@
-const fs = require('fs')
+const homePage = require('../views/home')
+const studentPage = require('../views/student')
 
-const renderPage = (res, fileName, data) => {
-	res.render(fileName, data)
+function handleHome(res) {
+	homePage(res)
 }
 
-const handleHome = (req, res) => {
-	renderPage(res, 'home')
-}
-
-const handleStudent = (req, res) => {
-	const { code, name, lastname, gender, age, studyField } = req.body
-
-	fs.writeFile('${code}.txt, Numer albumu: ${code}\nImię: ${name}\nNazwisko: ${lastname}\nPłeć: ${gender}\nWiek: ${age}\nKierunek: ${studyField}', (err) => {
-		if (err) throw err
-		console.log('Dane zapisano do pliku.')
+function handleStudent(req, res) {
+	let body = []
+	req.on('data', (chunk) => {
+		body.push(chunk)
+	}).on('end', () => {
+		const formData = Buffer.concat(body).toString()
+		studentPage(res, formData)
 	})
-
-	const data = { code, name, lastname, gender, age, studyField }
-	renderPage(res, 'student', data)
 }
 
 module.exports = {

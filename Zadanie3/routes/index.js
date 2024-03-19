@@ -1,23 +1,17 @@
-const renderPage = (res, fileName) => {
-	res.sendFile('${__dirname}/../views/${fileName}.html')
-}
-  
+const homePage = require('../views/home')
+const studentPage = require('../views/student')
 
-const handleHome = (req, res) => {
-	renderPage(res, 'home')
+function handleHome(res) {
+	res.writeHead(200, { 'Content-Type': 'text/html' })
+	homePage.renderPage(res)
 }
-  
 
-const handleStudent = (req, res) => {
-	renderPage(res, 'student')
+function handleStudent(res) {
+	res.writeHead(200, { 'Content-Type': 'text/html' })
+	studentPage.renderPage(res)
 }
-  
-const handleFormSubmission = (req, res) => {
-	res.redirect('/student')
-}
-  
+
 module.exports = {
 	handleHome,
-	handleStudent,
-	handleFormSubmission
+	handleStudent
 }

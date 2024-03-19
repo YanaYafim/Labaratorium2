@@ -1,19 +1,22 @@
-const express = require('express')
-const app = express()
+const http = require('http')
+const fs = require('fs')
 const PORT = 3000
 
-app.use(express.urlencoded({ extended: true }))
+const { handleHome, handleStudent } = require('./routes')
 
-const routes = require('./routes/index')
-
-const server = app.listen(PORT, () => {
-	console.log('Server is running on ${PORT}')
+const server = http.createServer((req, res) => {
+	if (req.url === '/' && req.method === 'GET') {
+		handleHome(res)
+	} else if (req.url === '/student' && req.method === 'POST') {
+		res.writeHead(302, { 'Location': '/' })
+		res.end()
+	} else {
+		res.writeHead(404, { 'Content-Type': 'text/html' })
+		res.write('<html><head><title>404 Not Found</title></head><body>404 Not Found</body></html>')
+		res.end()
+	}
 })
 
-app.get('/', routes.handleHome)
-app.get('/student', routes.handleStudent)
-app.post('/student', routes.handleFormSubmission)
-
-app.use((req, res, next) => {
-	res.status(404).header('Content-Type', 'text/html').send('404 Not Found')
+server.listen(PORT, () => {
+	console.log(`Server is running on ${PORT}`)
 })
