@@ -1,0 +1,6 @@
+Numer albumu: 44102
+Imię: Yana
+Nazwisko: Yafimava
+Płeć: female
+Wiek: 18
+Kierunek: Informatyka
